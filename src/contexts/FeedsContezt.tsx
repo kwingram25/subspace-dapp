@@ -57,7 +57,9 @@ export function FeedsContextProvider({
 }: React.PropsWithChildren<Partial<Value>>) {
   const { accounts, api, isReady } = useApi();
 
+  // Track ongoing transactions and display status popups
   const [txQueue, setTxQueue] = useState<Record<number, Tx>>({});
+
   const [accountId, setAccountId] = useState(
     accounts && accounts[0] ? accounts[0].address : null
   );
@@ -74,6 +76,7 @@ export function FeedsContextProvider({
     [feedIds, feedReports.length]
   );
 
+  // Retrieve feed ids owned by the current user
   const refreshFeeds = useCallback(
     (clearAll = false) => {
       if (clearAll) {
@@ -97,6 +100,7 @@ export function FeedsContextProvider({
     [api, accountId, isReady]
   );
 
+  // Flow for provided chain transaction and success handling
   const createTxCallback = useCallback(
     (
         type: TxType,
@@ -130,6 +134,7 @@ export function FeedsContextProvider({
         tx()
           .signAndSend(idOrPair, { signer }, (result) => {
             if (result.status.isInBlock) {
+              // Check for success event
               const isComplete = result.events.find(({ event }: EventRecord) =>
                 successEvent().is(event)
               );
@@ -208,16 +213,19 @@ export function FeedsContextProvider({
     [api, createTxCallback]
   );
 
+  // Set account once accounts are loaded
   useEffect(() => {
     if (!accountId && accounts && accounts[0] && isReady) {
       setAccountId(accounts[0].address);
     }
   }, [accountId, accounts, isReady]);
 
+  // If account id was changed, clear old results
   useEffect(() => {
     refreshFeeds(true);
   }, [refreshFeeds]);
 
+  // Detect new feed ids and fetch metadata from chain
   useEffect(() => {
     if (!api || !isReady) {
       return undefined;
@@ -276,6 +284,7 @@ export function FeedsContextProvider({
     };
   }, [api, isReady, feedIds]);
 
+  // Auto-dismiss tx success or error messages
   useEffect(() => {
     let autoDismiss: NodeJS.Timeout;
 

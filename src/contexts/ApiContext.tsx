@@ -14,7 +14,6 @@ import {
 } from '@polkadot/extension-dapp';
 import { keyring } from '@polkadot/ui-keyring';
 
-import { getChainProperties } from '../api';
 import { WS_RPC_URL } from '../constants';
 import { INIT_STATE, reducer } from '../reducers/api';
 import type { ApiState as Value, VoidFn } from '../types';
@@ -52,8 +51,6 @@ export function ApiContextProvider({
         // `ready` event is not emitted upon reconnection and is checked explicitly here.
         await _api.isReady;
 
-        const chainProperties = await getChainProperties(_api);
-
         if (!web3EnablePromise) await web3Enable('contracts-ui');
         const injectedAccounts = await web3Accounts();
 
@@ -66,7 +63,7 @@ export function ApiContextProvider({
 
         dispatch({
           type: 'READY',
-          payload: [chainProperties, keyring.getAccounts()],
+          payload: keyring.getAccounts(),
         });
       });
 
@@ -100,7 +97,6 @@ export function ApiContextProvider({
     () => ({
       accounts: state.accounts,
       api: state.api,
-      chainProperties: state.chainProperties,
       error: state.error,
       isConnected: state.isConnected,
       isReady: state.isReady,
@@ -109,7 +105,6 @@ export function ApiContextProvider({
     [
       state.accounts,
       state.api,
-      state.chainProperties,
       state.error,
       state.isConnected,
       state.isReady,
