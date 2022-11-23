@@ -4,7 +4,6 @@ import type { ApiAction, ApiState } from '../types';
 
 export const INIT_STATE = {
   api: null,
-  chainProperties: null,
   error: null,
   isConnected: false,
   isReady: false,
@@ -30,8 +29,7 @@ export const reducer: Reducer<ApiState, ApiAction> = (state, action) => {
     case 'READY':
       return {
         ...state,
-        chainProperties: action.payload[0],
-        accounts: action.payload[1],
+        accounts: action.payload,
         isReady: true,
         error: null,
       };
