@@ -4,7 +4,7 @@ import reactJsx from 'vite-react-jsx';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/subspace-dapp',
+  base: '/subspace-dapp/',
   plugins: [reactRefresh(), reactJsx()],
   build: {
     rollupOptions: {
