@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "deploy": "yarn build; ./scripts/deploy.sh",
+    "deploy": "./scripts/deploy.sh",
     "serve": "vite preview",
     "lint": "eslint src --ext .tsx --ext .ts",
     "lint:fix": "yarn lint --fix",
